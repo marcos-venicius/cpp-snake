@@ -1,26 +1,28 @@
 #include "apples.h"
 #include <random>
 
-Apples::Apples(int16_t length, int16_t size) {
+Apples::Apples(int16_t length, int16_t size)
+{
     m_size = size;
     m_length = length;
 
     Color color = {
         .r = .5,
         .g = 1,
-        .b = .5
-    };
+        .b = .5};
 
-    for (int16_t i = 0; i < length; i ++) {
+    for (int16_t i = 0; i < length; i++)
+    {
         XY pos = randomPos();
-
+        std::pair<int, int> key(pos.x, pos.y);
         Box box(pos, color, size);
 
-        m_boxes.insert(box);
+        m_boxes.insert({key, box});
     }
 }
 
-XY Apples::randomPos() {
+XY Apples::randomPos()
+{
     std::random_device rd;
     std::mt19937 generator(rd());
 
@@ -32,31 +34,35 @@ XY Apples::randomPos() {
 
     return XY{
         .x = (int16_t)(x - x % m_size),
-        .y = (int16_t)(y - y % m_size)
-    };
+        .y = (int16_t)(y - y % m_size)};
 }
 
-void Apples::spawn() {
+void Apples::spawn()
+{
     Color color = {
         .r = .5,
         .g = 1,
-        .b = .5
-    };
+        .b = .5};
     XY pos = randomPos();
     Box box(pos, color, m_size);
-    m_boxes.insert(box);
+
+    m_boxes.insert({box.key(), box});
 }
 
-void Apples::remove(Box box) {
-    m_boxes.erase(box);
+void Apples::remove(Box box)
+{
+    m_boxes.erase(box.key());
 }
 
-void Apples::drawFunc(void (* callback)(Box)) {
-    for (Box box : m_boxes) {
-        callback(box);
+void Apples::drawFunc(void (*callback)(Box))
+{
+    for (const auto& pair : m_boxes)
+    {
+        callback(pair.second);
     }
 }
 
-Apples::~Apples() {
+Apples::~Apples()
+{
     // free
 }

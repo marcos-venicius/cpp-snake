@@ -116,8 +116,12 @@ void handleWasdKeys(unsigned char key, int, int) {
     }
 }
 
-void timer(int) {
+void updateGame() {
     snake.animate();
+}
+
+void timer(int) {
+    updateGame();
 
     glutPostRedisplay();
     glutTimerFunc(FRAME_DURATION, timer, 0);

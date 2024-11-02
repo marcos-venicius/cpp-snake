@@ -29,25 +29,16 @@ struct Box
 
     Box() : pos(), color(), size(0) {}
     Box(XY position, Color col, int16_t sz) : pos(position), color(col), size(sz) {}
+    std::pair<int, int> key() { return std::make_pair(pos.x, pos.y); }
 };
-
-bool operator==(const Box &lhs, const Box &rhs);
-bool operator==(const Color &lhs, const Color &rhs);
-bool operator==(const XY &lhs, const XY &rhs);
 
 namespace std
 {
     template <>
-    struct hash<Box>
+    struct hash<std::pair<int, int>>
     {
-        size_t operator()(const Box &box) const
-        {
-            return hash<int16_t>()(box.pos.x) ^
-                   hash<int16_t>()(box.pos.y) ^
-                   hash<float>()(box.color.r) ^
-                   hash<float>()(box.color.g) ^
-                   hash<float>()(box.color.b) ^
-                   hash<int16_t>()(box.size);
+        size_t operator()(const std::pair<int, int>& p) const {
+            return hash<int>()(p.first) ^ (hash<int>()(p.second) << 1);
         }
     };
 }
