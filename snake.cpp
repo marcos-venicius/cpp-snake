@@ -1,6 +1,5 @@
 #include "snake.h"
 #include <stdio.h>
-#include "consts.h"
 
 Snake::Snake(int16_t length, int16_t size) {
     m_size = size;
@@ -23,11 +22,7 @@ Snake::Snake(int16_t length, int16_t size) {
     };
 
     for (int16_t i = 0; i < length; i++) {
-        Box box = {
-            .pos = pos,
-            .color = color,
-            .size = size
-        };
+        Box box(pos, color, size);
 
         m_boxes.push_back(box);
 
@@ -106,15 +101,13 @@ void Snake::increaseSize() {
         pos.x = pos.x - m_size;
     }
 
-    Box box = {
-        .pos = pos,
-        .color = {
+    Color color = {
             .r = 1,
             .g = 1,
             .b = 1
-        },
-        .size = m_size
     };
+
+    Box box(pos, color, m_size);
 
     m_boxes.push_back(box);
 

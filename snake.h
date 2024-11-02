@@ -1,22 +1,6 @@
 #include <vector>
 #include <cstdint>
-
-typedef struct {
-    float r;
-    float g;
-    float b;
-} Color;
-
-typedef struct {
-    int16_t x;
-    int16_t y;
-} XY;
-
-typedef struct {
-    XY pos;
-    Color color;
-    int16_t size;
-} Box;
+#include "consts.h"
 
 class Snake
 {

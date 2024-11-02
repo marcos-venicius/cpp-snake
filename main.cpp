@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <vector>
 #include "snake.h"
+#include "apples.h"
 #include <cstdint>
 #if _WIN32
 #   include <Windows.h>
@@ -22,6 +23,7 @@ const int FRAME_DURATION = 1000 / FPS;
 
 int window;
 Snake snake = Snake(3, BOX_SIZE);
+Apples apples = Apples(1, BOX_SIZE);
 
 void stopGame() {
     printf("stopping game\n");
@@ -61,6 +63,7 @@ void drawWindow() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     snake.drawFunc(drawBox);
+    apples.drawFunc(drawBox);
     snake.animate();
 
     glFlush();
