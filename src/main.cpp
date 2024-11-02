@@ -21,6 +21,11 @@
 
 
 std::vector<Box> boxes;
+int window;
+
+void stopGame() {
+    glutDestroyWindow(window);
+}
 
 Box createBox(uint32_t x, uint32_t y, uint32_t s, Color color = { .red = 1.f, .green = 1.f, .blue = 1.f}) {
     return {
@@ -130,6 +135,8 @@ void handleWasdKeys(unsigned char key, int, int) {
         case 'd':
             move(1, 0);
             break;
+        case 'q':
+            stopGame();
         default:
             break;
     }
@@ -153,7 +160,7 @@ int main(int argc, char **argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(WIDTH, HEIGHT);
-    glutCreateWindow("Hello");
+    window = glutCreateWindow("Hello");
     glutDisplayFunc(drawWindow);
     glutReshapeFunc(reshape);
 
