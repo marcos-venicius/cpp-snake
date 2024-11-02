@@ -5,6 +5,10 @@
 Snake::Snake(uint16_t length, uint16_t size) {
     m_size = size;
     m_length = length;
+    m_direction = {
+        .x = 1,
+        .y = 0
+    };
 
     XY pos = {
         .x = 0,
@@ -82,6 +86,13 @@ void Snake::move(int16_t x, int16_t y) {
 
         lastPosition = tmp;
     }
+
+    m_direction.x = x;
+    m_direction.y = y;
+}
+
+void Snake::animate() {
+    move(m_direction.x, m_direction.y);
 }
 
 Snake::~Snake() {

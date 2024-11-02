@@ -24,6 +24,7 @@ private:
     uint16_t m_size;
     uint16_t m_length;
     std::vector<Box> m_boxes;
+    XY m_direction;
 
     void handleHorizontalOutBounds(XY *pos);
     void handleVerticalOutBounds(XY *pos);
@@ -34,4 +35,5 @@ public:
     ~Snake();
     void drawFunc(void (* callback)(Box));
     void move(int16_t x, int16_t y);
+    void animate();
 };

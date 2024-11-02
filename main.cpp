@@ -17,6 +17,9 @@
 
 #include "consts.h"
 
+const int FPS = 10;
+const int FRAME_DURATION = 1000 / FPS;
+
 int window;
 Snake snake = Snake(3, BOX_SIZE);
 
@@ -58,10 +61,11 @@ void drawWindow() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     snake.drawFunc(drawBox);
+    snake.animate();
 
     glFlush();
 
-    glutPostRedisplay();
+    glutSwapBuffers();
 }
 
 void handleSpecialKey(int key, int, int) {
@@ -104,6 +108,11 @@ void handleWasdKeys(unsigned char key, int, int) {
     }
 }
 
+void timer(int) {
+    glutPostRedisplay();
+    glutTimerFunc(FRAME_DURATION, timer, 0);
+}
+
 int main(int argc, char **argv) {
     snake = Snake(3, BOX_SIZE);
 
@@ -111,11 +120,14 @@ int main(int argc, char **argv) {
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(WIDTH, HEIGHT);
     window = glutCreateWindow("Hello");
+
     glutDisplayFunc(drawWindow);
     glutReshapeFunc(reshape);
 
     glutSpecialFunc(handleSpecialKey);
     glutKeyboardFunc(handleWasdKeys);
+
+    glutTimerFunc(0, timer, 0);
 
     glutMainLoop();
 
