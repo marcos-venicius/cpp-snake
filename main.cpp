@@ -64,7 +64,6 @@ void drawWindow() {
 
     snake.drawFunc(drawBox);
     apples.drawFunc(drawBox);
-    snake.animate();
 
     glFlush();
 
@@ -118,6 +117,8 @@ void handleWasdKeys(unsigned char key, int, int) {
 }
 
 void timer(int) {
+    snake.animate();
+
     glutPostRedisplay();
     glutTimerFunc(FRAME_DURATION, timer, 0);
 }
