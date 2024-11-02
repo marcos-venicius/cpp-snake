@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <vector>
-#include "objects.h"
+#include "snake.h"
 #include <cstdint>
 #if _WIN32
 #   include <Windows.h>
@@ -20,29 +20,22 @@
 #define BOX_SIZE 10
 
 
-std::vector<Box> boxes;
 int window;
+Snake snake = Snake(3, BOX_SIZE);
 
 void stopGame() {
+    printf("stopping game\n");
     glutDestroyWindow(window);
-}
-
-Box createBox(uint32_t x, uint32_t y, uint32_t s, Color color = { .red = 1.f, .green = 1.f, .blue = 1.f}) {
-    return {
-        .x = x,
-        .y = y,
-        .s = s,
-        .color = color
-    };
+    exit(0);
 }
 
 void drawBox(Box box) {
-    float bottomLeftX = box.x + box.s;
-    float bottomLeftY = HEIGHT - (box.y + box.s);
-    float topRightX = box.x;
-    float topRightY = HEIGHT - box.y;
+    float bottomLeftX = box.pos.x + box.size;
+    float bottomLeftY = HEIGHT - (box.pos.y + box.size);
+    float topRightX = box.pos.x;
+    float topRightY = HEIGHT - box.pos.y;
 
-    glColor3f(box.color.red, box.color.green, box.color.blue);
+    glColor3f(box.color.r, box.color.g, box.color.b);
 
     glBegin(GL_QUADS);
         glVertex2f(bottomLeftX, bottomLeftY);
@@ -65,11 +58,7 @@ void drawWindow() {
     glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // START DRAW
-    for (Box box : boxes) {
-        drawBox(box);
-    }
-    // END DRAW
+    snake.drawFunc(drawBox);
 
     glFlush();
 
@@ -82,24 +71,21 @@ void move(int x, int y) {
         exit(1);
     }
 
-    x *= BOX_SIZE;
-    y *= BOX_SIZE;
+    // size_t boxes_size = snake.boxes.size();
 
-    size_t boxes_size = boxes.size();
-
-    for (size_t i = 0; i < boxes_size; i++)
-    {
-        if (i == boxes_size - 1)
-        {
-            boxes[i].x = boxes[i].x + x;
-            boxes[i].y = boxes[i].y + y;
-        }
-        else
-        {
-            boxes[i].x = boxes[i + 1].x;
-            boxes[i].y = boxes[i + 1].y;
-        }
-    }
+    // for (size_t i = boxes_size - 1; i >= 0; i--)
+    // {
+        // if (i == boxes_size - 1)
+        // {
+        //     boxes[i].x = boxes[i].x + x;
+        //     boxes[i].y = boxes[i].y + y;
+        // }
+        // else
+        // {
+        //     boxes[i].x = boxes[i + 1].x;
+        //     boxes[i].y = boxes[i + 1].y;
+        // }
+    // }
 }
 
 void handleSpecialKey(int key, int, int) {
@@ -142,20 +128,8 @@ void handleWasdKeys(unsigned char key, int, int) {
     }
 }
 
-void createInitialSnake(uint size) {
-    int currentX = 0;
-
-    for (size_t i = 0; i < size; i++) {
-        Box box = createBox(currentX, 0, BOX_SIZE);
-
-        boxes.push_back(box);
-
-        currentX += BOX_SIZE;
-    }
-}
-
 int main(int argc, char **argv) {
-    createInitialSnake(3);
+    snake = Snake(3, BOX_SIZE);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);

@@ -1,10 +1,18 @@
-build:
-	mkdir -p dist
+CXX = g++
+CXXFLAGS = -Wall -std=c++11
+LIBFLAGS = -lglut -lGLU -lGL
 
-	g++ -Wall -std=c++11 src/main.cpp -o program -lglut -lGLU -lGL
+SRC = $(wildcard *.cpp)
+OBJ = $(SRC:.cpp=.o)
+TARGET = program
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(CXX) -o $@ $^ $(LIBFLAGS)
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< $(LIBFLAGS)
 
 clean:
-	rm program
-
-run:
-	./program
+	rm -rf $(OBJ) $(TARGET)
