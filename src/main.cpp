@@ -1,0 +1,139 @@
+#include <stdio.h>
+#include <vector>
+#include "objects.h"
+#include <cstdint>
+#if _WIN32
+#   include <Windows.h>
+#endif
+#if __APPLE__
+#   include <OpenGL/gl.h>
+#   include <OpenGL/glu.h>
+#   include <GLUT/glut.h>
+#else
+#   include <GL/gl.h>
+#   include <GL/glu.h>
+#   include <GL/glut.h>
+#endif
+
+#define WIDTH 1000
+#define HEIGHT 800
+#define BOX_SIZE 10
+
+
+std::vector<Box> boxes;
+
+Box createBox(uint32_t x, uint32_t y, uint32_t w, uint32_t h, Color color = { .red = 1.f, .green = 1.f, .blue = 1.f}) {
+    return {
+        .x = x,
+        .y = y,
+        .w = w,
+        .h = h,
+        .color = color
+    };
+}
+
+void drawBox(Box box) {
+    float bottomLeftX = box.x + box.w;
+    float bottomLeftY = HEIGHT - (box.y + box.h);
+    float topRightX = box.x;
+    float topRightY = HEIGHT - box.y;
+
+    glColor3f(box.color.red, box.color.green, box.color.blue);
+
+    glBegin(GL_QUADS);
+        glVertex2f(bottomLeftX, bottomLeftY);
+        glVertex2f(topRightX, bottomLeftY);
+        glVertex2f(topRightX, topRightY);
+        glVertex2f(bottomLeftX, topRightY);
+    glEnd();
+}
+
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, w, 0, h);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
+void drawWindow() {
+    glClearColor(0.f, 0.f, 0.f, 1.f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // START DRAW
+    for (Box box : boxes) {
+        drawBox(box);
+    }
+    // END DRAW
+
+    glFlush();
+}
+
+void move(int x, int y) {
+    if ((x != -1 && x != 1 && x != 0) || (y != -1 && y != 1 && y != 0)) {
+        printf("Invalid movement\n");
+        exit(1);
+    }
+
+    x = BOX_SIZE * x;
+    y = BOX_SIZE * y;
+
+    size_t boxes_size = boxes.size();
+
+    for (size_t i = 0; i < boxes_size; i++)
+    {
+        if (i == boxes_size - 1)
+        {
+            boxes[i].x = boxes[i].x + x;
+            boxes[i].y = boxes[i].y + y;
+        }
+        else
+        {
+            boxes[i].x = boxes[i + 1].x;
+            boxes[i].y = boxes[i + 1].y;
+        }
+    }
+}
+
+void handleSpecialKey(int key, int x, int y) {
+    switch (key) {
+        case GLUT_KEY_UP:
+            move(0, -1);
+            break;
+        case GLUT_KEY_DOWN:
+            move(0, 1);
+            break;
+        case GLUT_KEY_LEFT:
+            move(-1, 0);
+            break;
+        case GLUT_KEY_RIGHT:
+            move(1, 0);
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+int main(int argc, char **argv) {
+    Box box1 = createBox(0, 0, BOX_SIZE, BOX_SIZE);
+    Box box2 = createBox(10, 0, BOX_SIZE, BOX_SIZE);
+    Box box3 = createBox(20, 0, BOX_SIZE, BOX_SIZE);
+
+    boxes.push_back(box1);
+    boxes.push_back(box2);
+    boxes.push_back(box3);
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(WIDTH, HEIGHT);
+    glutCreateWindow("Hello");
+    glutDisplayFunc(drawWindow);
+    glutReshapeFunc(reshape);
+
+    glutSpecialFunc(handleSpecialKey);
+
+    glutMainLoop();
+
+    return 0;
+}
