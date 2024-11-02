@@ -38,10 +38,12 @@ void drawBox(Box box) {
     glColor3f(box.color.r, box.color.g, box.color.b);
 
     glBegin(GL_QUADS);
-        glVertex2f(bottomLeftX, bottomLeftY);
-        glVertex2f(topRightX, bottomLeftY);
-        glVertex2f(topRightX, topRightY);
-        glVertex2f(bottomLeftX, topRightY);
+
+    glVertex2f(bottomLeftX, bottomLeftY);
+    glVertex2f(topRightX, bottomLeftY);
+    glVertex2f(topRightX, topRightY);
+    glVertex2f(bottomLeftX, topRightY);
+
     glEnd();
 }
 
@@ -65,42 +67,19 @@ void drawWindow() {
     glutPostRedisplay();
 }
 
-void move(int x, int y) {
-    if ((x != -1 && x != 1 && x != 0) || (y != -1 && y != 1 && y != 0)) {
-        perror("Invalid movement\n");
-        exit(1);
-    }
-
-    // size_t boxes_size = snake.boxes.size();
-
-    // for (size_t i = boxes_size - 1; i >= 0; i--)
-    // {
-        // if (i == boxes_size - 1)
-        // {
-        //     boxes[i].x = boxes[i].x + x;
-        //     boxes[i].y = boxes[i].y + y;
-        // }
-        // else
-        // {
-        //     boxes[i].x = boxes[i + 1].x;
-        //     boxes[i].y = boxes[i + 1].y;
-        // }
-    // }
-}
-
 void handleSpecialKey(int key, int, int) {
     switch (key) {
         case GLUT_KEY_UP:
-            move(0, -1);
+            snake.move(0, -1);
             break;
         case GLUT_KEY_DOWN:
-            move(0, 1);
+            snake.move(0, 1);
             break;
         case GLUT_KEY_LEFT:
-            move(-1, 0);
+            snake.move(-1, 0);
             break;
         case GLUT_KEY_RIGHT:
-            move(1, 0);
+            snake.move(1, 0);
             break;
         default:
             break;
@@ -110,16 +89,16 @@ void handleSpecialKey(int key, int, int) {
 void handleWasdKeys(unsigned char key, int, int) {
     switch (key) {
         case 'w':
-            move(0, -1);
+            snake.move(0, -1);
             break;
         case 's':
-            move(0, 1);
+            snake.move(0, 1);
             break;
         case 'a':
-            move(-1, 0);
+            snake.move(-1, 0);
             break;
         case 'd':
-            move(1, 0);
+            snake.move(1, 0);
             break;
         case 'q':
             stopGame();

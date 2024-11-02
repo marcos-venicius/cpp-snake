@@ -22,6 +22,7 @@ class Snake
 {
 private:
     uint16_t m_size;
+    uint16_t m_length;
     std::vector<Box> m_boxes;
 
 public:
@@ -29,4 +30,5 @@ public:
     Snake(uint16_t length, uint16_t size);
     ~Snake();
     void drawFunc(void (* callback)(Box));
+    void move(int16_t x, int16_t y);
 };
