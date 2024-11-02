@@ -32,14 +32,18 @@ private:
     bool goingLeft();
     bool goingDown();
     bool goingUp();
+    void move(int16_t x, int16_t y);
 
 public:
 
     Snake(int16_t length, int16_t size);
     ~Snake();
     void drawFunc(void (* callback)(Box));
-    void move(int16_t x, int16_t y);
     void animate();
+    void turnUp();
+    void turnDown();
+    void turnLeft();
+    void turnRight();
     void increaseSize();
     void decreaseSize();
 };

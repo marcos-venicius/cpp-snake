@@ -71,16 +71,16 @@ void drawWindow() {
 void handleSpecialKey(int key, int, int) {
     switch (key) {
         case GLUT_KEY_UP:
-            snake.move(0, -1);
+            snake.turnUp();
             break;
         case GLUT_KEY_DOWN:
-            snake.move(0, 1);
+            snake.turnDown();
             break;
         case GLUT_KEY_LEFT:
-            snake.move(-1, 0);
+            snake.turnLeft();
             break;
         case GLUT_KEY_RIGHT:
-            snake.move(1, 0);
+            snake.turnRight();
             break;
         default:
             break;
@@ -90,16 +90,16 @@ void handleSpecialKey(int key, int, int) {
 void handleWasdKeys(unsigned char key, int, int) {
     switch (key) {
         case 'w':
-            snake.move(0, -1);
+            snake.turnUp();
             break;
         case 's':
-            snake.move(0, 1);
+            snake.turnDown();
             break;
         case 'a':
-            snake.move(-1, 0);
+            snake.turnLeft();
             break;
         case 'd':
-            snake.move(1, 0);
+            snake.turnRight();
             break;
         case 'q':
             stopGame();

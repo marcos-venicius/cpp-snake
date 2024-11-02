@@ -143,6 +143,22 @@ bool Snake::goingRight() {
     return m_direction.x == 1;
 }
 
+void Snake::turnUp() {
+    move(0, -1);
+}
+
+void Snake::turnDown() {
+    move(0, 1);
+}
+
+void Snake::turnLeft() {
+    move(-1, 0);
+}
+
+void Snake::turnRight() {
+    move(1, 0);
+}
+
 Snake::~Snake() {
     // free
 }
