@@ -67,6 +67,8 @@ void drawWindow() {
     // END DRAW
 
     glFlush();
+
+    glutPostRedisplay();
 }
 
 void move(int x, int y) {
@@ -112,8 +114,6 @@ void handleSpecialKey(int key, int, int) {
         default:
             break;
     }
-
-    glutPostRedisplay();
 }
 
 void handleWasdKeys(unsigned char key, int, int) {
@@ -133,8 +133,6 @@ void handleWasdKeys(unsigned char key, int, int) {
         default:
             break;
     }
-
-    glutPostRedisplay();
 }
 
 int main(int argc, char **argv) {
