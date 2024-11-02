@@ -15,10 +15,7 @@
 #   include <GL/glut.h>
 #endif
 
-#define WIDTH 1000
-#define HEIGHT 800
-#define BOX_SIZE 10
-
+#include "consts.h"
 
 int window;
 Snake snake = Snake(3, BOX_SIZE);

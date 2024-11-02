@@ -8,8 +8,8 @@ typedef struct {
 } Color;
 
 typedef struct {
-    uint16_t x;
-    uint16_t y;
+    int16_t x;
+    int16_t y;
 } Pos;
 
 typedef struct {
@@ -24,6 +24,9 @@ private:
     uint16_t m_size;
     uint16_t m_length;
     std::vector<Box> m_boxes;
+
+    void handleHorizontalOutBounds(Pos *pos);
+    void handleVerticalOutBounds(Pos *pos);
 
 public:
 
