@@ -22,19 +22,18 @@
 
 std::vector<Box> boxes;
 
-Box createBox(uint32_t x, uint32_t y, uint32_t w, uint32_t h, Color color = { .red = 1.f, .green = 1.f, .blue = 1.f}) {
+Box createBox(uint32_t x, uint32_t y, uint32_t s, Color color = { .red = 1.f, .green = 1.f, .blue = 1.f}) {
     return {
         .x = x,
         .y = y,
-        .w = w,
-        .h = h,
+        .s = s,
         .color = color
     };
 }
 
 void drawBox(Box box) {
-    float bottomLeftX = box.x + box.w;
-    float bottomLeftY = HEIGHT - (box.y + box.h);
+    float bottomLeftX = box.x + box.s;
+    float bottomLeftY = HEIGHT - (box.y + box.s);
     float topRightX = box.x;
     float topRightY = HEIGHT - box.y;
 
@@ -72,12 +71,12 @@ void drawWindow() {
 
 void move(int x, int y) {
     if ((x != -1 && x != 1 && x != 0) || (y != -1 && y != 1 && y != 0)) {
-        printf("Invalid movement\n");
+        perror("Invalid movement\n");
         exit(1);
     }
 
-    x = BOX_SIZE * x;
-    y = BOX_SIZE * y;
+    x *= BOX_SIZE;
+    y *= BOX_SIZE;
 
     size_t boxes_size = boxes.size();
 
@@ -96,7 +95,7 @@ void move(int x, int y) {
     }
 }
 
-void handleSpecialKey(int key, int x, int y) {
+void handleSpecialKey(int key, int, int) {
     switch (key) {
         case GLUT_KEY_UP:
             move(0, -1);
@@ -110,15 +109,38 @@ void handleSpecialKey(int key, int x, int y) {
         case GLUT_KEY_RIGHT:
             move(1, 0);
             break;
+        default:
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+void handleWasdKeys(unsigned char key, int, int) {
+    switch (key) {
+        case 'w':
+            move(0, -1);
+            break;
+        case 's':
+            move(0, 1);
+            break;
+        case 'a':
+            move(-1, 0);
+            break;
+        case 'd':
+            move(1, 0);
+            break;
+        default:
+            break;
     }
 
     glutPostRedisplay();
 }
 
 int main(int argc, char **argv) {
-    Box box1 = createBox(0, 0, BOX_SIZE, BOX_SIZE);
-    Box box2 = createBox(10, 0, BOX_SIZE, BOX_SIZE);
-    Box box3 = createBox(20, 0, BOX_SIZE, BOX_SIZE);
+    Box box1 = createBox(0, 0, BOX_SIZE);
+    Box box2 = createBox(10, 0, BOX_SIZE);
+    Box box3 = createBox(20, 0, BOX_SIZE);
 
     boxes.push_back(box1);
     boxes.push_back(box2);
@@ -132,6 +154,7 @@ int main(int argc, char **argv) {
     glutReshapeFunc(reshape);
 
     glutSpecialFunc(handleSpecialKey);
+    glutKeyboardFunc(handleWasdKeys);
 
     glutMainLoop();
 
