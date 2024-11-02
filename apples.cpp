@@ -4,7 +4,6 @@
 Apples::Apples(int16_t length, int16_t size)
 {
     m_size = size;
-    m_length = length;
 
     Color color = {
         .r = .5,
@@ -49,17 +48,28 @@ void Apples::spawn()
     m_boxes.insert({box.key(), box});
 }
 
-void Apples::remove(Box box)
-{
-    m_boxes.erase(box.key());
-}
-
 void Apples::drawFunc(void (*callback)(Box))
 {
-    for (const auto& pair : m_boxes)
+    for (const auto &pair : m_boxes)
     {
         callback(pair.second);
     }
+}
+
+bool Apples::checkCollision(Box box) {
+    std::pair<int, int> key = box.key();
+
+    auto it = m_boxes.find(key);
+
+    if (it != m_boxes.end()) {
+        m_boxes.erase(key);
+
+        spawn();
+
+        return true;
+    }
+
+    return false;
 }
 
 Apples::~Apples()

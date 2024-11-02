@@ -105,18 +105,16 @@ void handleWasdKeys(unsigned char key, int, int) {
             break;
         case 'q':
             stopGame();
-        case 'n':
-            snake.increaseSize();
-            break;
-        case 'p':
-            snake.decreaseSize();
-            break;
         default:
             break;
     }
 }
 
 void updateGame() {
+    snake.checkAppleCollision([](Box box) {
+        return apples.checkCollision(box);
+    });
+
     snake.animate();
 }
 
@@ -133,7 +131,7 @@ int main(int argc, char **argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(WIDTH, HEIGHT);
-    window = glutCreateWindow("Hello");
+    window = glutCreateWindow("SNAKE GAME");
 
     glutDisplayFunc(drawWindow);
     glutReshapeFunc(reshape);

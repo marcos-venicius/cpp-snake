@@ -114,10 +114,16 @@ void Snake::increaseSize() {
     m_length++;
 }
 
-void Snake::decreaseSize() {
-    m_boxes.pop_back();
+bool Snake::checkAppleCollision(bool (* callback) (Box)) {
+    Box head = m_boxes[0];
 
-    m_length--;
+    bool collided = callback(head);
+
+    if (collided) {
+        increaseSize();
+    }
+
+    return collided;
 }
 
 bool Snake::goingUp() {

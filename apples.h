@@ -7,14 +7,14 @@ class Apples
 {
 private:
     int16_t m_size;
-    int16_t m_length;
     std::unordered_map<std::pair<int, int>, Box> m_boxes;
     XY randomPos();
+    void spawn();
+
 public:
     Apples(int16_t length, int16_t size);
     ~Apples();
 
-    void spawn();
-    void remove(Box box);
-    void drawFunc(void (* callback)(Box));
+    void drawFunc(void (*callback)(Box));
+    bool checkCollision(Box box);
 };
