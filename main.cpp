@@ -103,6 +103,12 @@ void handleWasdKeys(unsigned char key, int, int) {
             break;
         case 'q':
             stopGame();
+        case 'n':
+            snake.increaseSize();
+            break;
+        case 'p':
+            snake.decreaseSize();
+            break;
         default:
             break;
     }

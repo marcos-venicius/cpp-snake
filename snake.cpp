@@ -2,31 +2,27 @@
 #include <stdio.h>
 #include "consts.h"
 
-Snake::Snake(uint16_t length, uint16_t size) {
+Snake::Snake(int16_t length, int16_t size) {
     m_size = size;
     m_length = length;
     m_direction = {
         .x = 1,
         .y = 0
     };
+    int16_t initialX = (length - 1) * size;
 
     XY pos = {
-        .x = 0,
+        .x = initialX,
         .y = 0
     };
 
     Color color = {
         .r = 1,
-        .g = 1,
-        .b = 1
+        .g = 0,
+        .b = 0
     };
 
-    for (uint16_t i = 0; i < length; i++) {
-        if (i == length - 1) {
-            color.g = 0;
-            color.b = 0;
-        }
-
+    for (int16_t i = 0; i < length; i++) {
         Box box = {
             .pos = pos,
             .color = color,
@@ -35,7 +31,12 @@ Snake::Snake(uint16_t length, uint16_t size) {
 
         m_boxes.push_back(box);
 
-        pos.x += size;
+        pos.x -= size;
+
+        if (i == 0) {
+            color.g = 1;
+            color.b = 1;
+        }
     }
 }
 
@@ -67,16 +68,20 @@ void Snake::move(int16_t x, int16_t y) {
         return;
     }
 
-    Box lastBox = m_boxes[m_boxes.size() - 1];
+    m_direction.x = x;
+    m_direction.y = y;
+}
 
+void Snake::animate() {
+    Box lastBox = m_boxes[0];
 
     XY lastPosition = lastBox.pos;
     XY tmp;
 
-    lastPosition.x += x * m_size;
-    lastPosition.y += y * m_size;
+    lastPosition.x += m_direction.x * m_size;
+    lastPosition.y += m_direction.y * m_size;
 
-    for (int i = m_length - 1; i >= 0; i--) {
+    for (int i = 0; i < m_length; i++) {
         handleHorizontalOutBounds(&lastPosition);
         handleVerticalOutBounds(&lastPosition);
 
@@ -86,13 +91,56 @@ void Snake::move(int16_t x, int16_t y) {
 
         lastPosition = tmp;
     }
-
-    m_direction.x = x;
-    m_direction.y = y;
 }
 
-void Snake::animate() {
-    move(m_direction.x, m_direction.y);
+void Snake::increaseSize() {
+    XY pos = m_boxes[m_boxes.size() - 1].pos;
+
+    if (goingUp()) {
+        pos.y = pos.y + m_size;
+    } else if (goingDown()) {
+        pos.y = pos.y - m_size;
+    } else if (goingLeft()) {
+        pos.x = pos.x + m_size;
+    } else if (goingRight()) {
+        pos.x = pos.x - m_size;
+    }
+
+    Box box = {
+        .pos = pos,
+        .color = {
+            .r = 1,
+            .g = 1,
+            .b = 1
+        },
+        .size = m_size
+    };
+
+    m_boxes.push_back(box);
+
+    m_length++;
+}
+
+void Snake::decreaseSize() {
+    m_boxes.pop_back();
+
+    m_length--;
+}
+
+bool Snake::goingUp() {
+    return m_direction.y == -1;
+}
+
+bool Snake::goingDown() {
+    return m_direction.y == 1;
+}
+
+bool Snake::goingLeft() {
+    return m_direction.x == -1;
+}
+
+bool Snake::goingRight() {
+    return m_direction.x == 1;
 }
 
 Snake::~Snake() {
