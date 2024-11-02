@@ -10,10 +10,10 @@ typedef struct {
 typedef struct {
     int16_t x;
     int16_t y;
-} Pos;
+} XY;
 
 typedef struct {
-    Pos pos;
+    XY pos;
     Color color;
     uint16_t size;
 } Box;
@@ -25,8 +25,8 @@ private:
     uint16_t m_length;
     std::vector<Box> m_boxes;
 
-    void handleHorizontalOutBounds(Pos *pos);
-    void handleVerticalOutBounds(Pos *pos);
+    void handleHorizontalOutBounds(XY *pos);
+    void handleVerticalOutBounds(XY *pos);
 
 public:
 

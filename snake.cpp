@@ -6,7 +6,7 @@ Snake::Snake(uint16_t length, uint16_t size) {
     m_size = size;
     m_length = length;
 
-    Pos pos = {
+    XY pos = {
         .x = 0,
         .y = 0
     };
@@ -41,7 +41,7 @@ void Snake::drawFunc(void (* callback)(Box)) {
     }
 }
 
-void Snake::handleHorizontalOutBounds(Pos *pos) {
+void Snake::handleHorizontalOutBounds(XY *pos) {
     if (pos->x < 0) {
         pos->x = WIDTH - m_size;
     } else if (pos->x > WIDTH - m_size) {
@@ -49,7 +49,7 @@ void Snake::handleHorizontalOutBounds(Pos *pos) {
     }
 }
 
-void Snake::handleVerticalOutBounds(Pos *pos) {
+void Snake::handleVerticalOutBounds(XY *pos) {
     if (pos->y < 0) {
         pos->y = HEIGHT - m_size;
     } else if (pos->y > HEIGHT - m_size) {
@@ -66,8 +66,8 @@ void Snake::move(int16_t x, int16_t y) {
     Box lastBox = m_boxes[m_boxes.size() - 1];
 
 
-    Pos lastPosition = lastBox.pos;
-    Pos tmp;
+    XY lastPosition = lastBox.pos;
+    XY tmp;
 
     lastPosition.x += x * m_size;
     lastPosition.y += y * m_size;
