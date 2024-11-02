@@ -135,14 +135,20 @@ void handleWasdKeys(unsigned char key, int, int) {
     }
 }
 
-int main(int argc, char **argv) {
-    Box box1 = createBox(0, 0, BOX_SIZE);
-    Box box2 = createBox(10, 0, BOX_SIZE);
-    Box box3 = createBox(20, 0, BOX_SIZE);
+void createInitialSnake(uint size) {
+    int currentX = 0;
 
-    boxes.push_back(box1);
-    boxes.push_back(box2);
-    boxes.push_back(box3);
+    for (size_t i = 0; i < size; i++) {
+        Box box = createBox(currentX, 0, BOX_SIZE);
+
+        boxes.push_back(box);
+
+        currentX += BOX_SIZE;
+    }
+}
+
+int main(int argc, char **argv) {
+    createInitialSnake(3);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
